@@ -1,4 +1,10 @@
 import { Markup } from 'telegraf'
+import { checkSubscribe, createUser, profileUser} from '../db.js'
+import { convertSeconds, nowTimeSecond } from '../utils.js'
+import config from "config"
+
+const price = config.get('ONE_PRICE')
+
 
 export const handleNewCommand = async (ctx) => {
     ctx.session = { messages: [] }; await ctx.reply('Контекст сброшен. Можно начать диалог заново')
@@ -7,6 +13,7 @@ export const handleNewCommand = async (ctx) => {
 
 export const handleStartCommand = async (ctx) => {
     ctx.session = { messages: [] }
+    await createUser(ctx.message.from.id, ctx.message.from.first_name)
     const welcomeMessage = `
 Привет! Добро пожаловать в нашего удивительного телеграм-бота! 👋
     
@@ -35,4 +42,42 @@ export const handleSettingsCommand = async (ctx) => {
             Markup.button.callback('💬 Текст', 'text')
         ])
     )
+}
+
+export const handlePlanCommand = async (ctx) => {
+    const checkSub = await checkSubscribe(ctx.from.id)
+    let subscribe = 'Не активна 😢'
+    let buttonText = 'Оформить'
+    if(checkSub) {
+        subscribe = 'Активна ✅'
+        buttonText = 'Продлить'
+    }
+    await ctx.replyWithMarkdown(`Сейчас подписка ${subscribe}
+    
+*Подписка это:*
+— Неограниченный доступ к боту
+— Ответы без очереди
+— Возможность задавать вопросы голосом
+— Озвучка ответов бота
+        
+Ты можешь ${buttonText} подписку на бота прямо сейчас!`,
+        Markup.inlineKeyboard([Markup.button.callback(`💳 ${buttonText} подписку — за ${price}₽`, 'pay')])
+    )
+}
+
+export const handleProfileCommand = async (ctx) => {
+    const user = await profileUser(ctx.message.from.id, ctx.message.from.first_name)
+    const checkSub = await checkSubscribe(ctx.message.from.id)
+    let subscribe = 'Не активна 😢'
+    let buttonText = 'Оформить'
+    if (checkSub) {
+        const checkTime = user.subscribe - nowTimeSecond()
+        subscribe = convertSeconds(checkTime)
+        buttonText = 'Продлить'
+    }
+    await ctx.reply(`👤 Профиль:
+    
+ID: ${user.telegramId}
+Имя: ${user.name}
+Подписка: ${subscribe}`,Markup.inlineKeyboard([Markup.button.callback(`💳 ${buttonText} подписку — за ${price}₽`, 'pay')]))
 }

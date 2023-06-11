@@ -2,7 +2,7 @@ export function processing(e) {
         if (e.response.status === 401) {
             return 'Не могу связаться с сервером OpenAI. ' +
                 'ChatGPT не отвечает. ' +
-                'Свяжитесь с администратором бота и сообщите код ошибки: 401'
+                'Свяжитесь с тех. поддержкой бота и сообщите код ошибки: 401'
         } else if (e.response.status === 429) {
             return'В настоящее время сервер OpenAI перегружен.' +
                 'Сейчас серверы OpenAI испытывают высокий трафик. ' +
@@ -15,6 +15,6 @@ export function processing(e) {
             console.log(e)
             console.log(e.response.status)
             return 'Возникла общая ошибка.' +
-                'Свяжитесь с администратором бота'
+                'Свяжитесь с тех. поддержкой бота'
         }
     }

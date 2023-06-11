@@ -1,4 +1,4 @@
-import {Configuration, OpenAIApi} from 'openai'
+import { Configuration, OpenAIApi } from 'openai'
 import config from "config"
 import { createReadStream } from 'fs'
 import { removeFile } from '../utils.js'
@@ -24,7 +24,6 @@ class OpenAI {
                 model: 'gpt-3.5-turbo',
                 messages,
             })
-
             return response.data.choices[0].message
         } catch (e) {
             console.log('Ошибка работы с Chat GPT : ', e.message)

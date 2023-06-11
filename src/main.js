@@ -2,11 +2,12 @@ import { Telegraf, session } from 'telegraf'
 import { message } from 'telegraf/filters'
 import { handleTextMessage, handleVoiceMessage } from './handlers/message.js'
 import {
-    handleNewCommand,
+    handleNewCommand, handlePlanCommand, handleProfileCommand,
     handleSettingsCommand,
     handleStartCommand
 } from './handlers/command.js'
 import {
+    handlePay,
     handleReplayTypeSelection,
     handleSelectedVoice
 } from './handlers/action.js'
@@ -27,6 +28,8 @@ bot.use(session())
 bot.command('new', handleNewCommand)
 bot.command('start', handleStartCommand)
 bot.command('settings', handleSettingsCommand)
+bot.command('profile', handleProfileCommand)
+bot.command('plan', handlePlanCommand)
 
 bot.action('voice', handleReplayTypeSelection('voice','🔈 Голос'))
 bot.action('text', handleReplayTypeSelection('text','💬 Текст'))
@@ -36,6 +39,13 @@ bot.action('alena', handleSelectedVoice('alena','👩🏼 Алёна'))
 bot.action('filipp', handleSelectedVoice('filipp','👨🏼 Филипп'))
 bot.action('jane', handleSelectedVoice('jane','👩🏼 Джейн'))
 bot.action('madirus', handleSelectedVoice('madirus','👨🏼 Мадирос'))
+
+bot.action('pay', handlePay())
+bot.action('plan', handlePlanCommand)
+// bot.action('pay30', handlePay('30'))
+// bot.action('pay90', handlePay('90'))
+// bot.action('pay180', handlePay('180'))
+// bot.action('pay365', handlePay('365'))
 
 bot.on(message('voice'), handleVoiceMessage)
 bot.on(message('text'), handleTextMessage)

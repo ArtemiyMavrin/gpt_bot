@@ -4,6 +4,8 @@ import { openai } from '../class/openai.js'
 import { speechKit } from '../class/sppechkit.js'
 import { processing } from '../errors.js'
 import config from 'config'
+import { checkSubscribe } from '../db.js'
+import { replaySubscribe } from '../utils.js'
 
 const adminMessage = config.get('ADMIN_CONTACT_MESSAGE')
 
@@ -29,6 +31,8 @@ const sendResponse = async (ctx, response) => {
 
 export const handleVoiceMessage = async (ctx) => {
     ctx.session ??= { messages: [] }
+    const checkPay = await checkSubscribe(ctx.from.id)
+    if(!checkPay) { return replaySubscribe(ctx) }
     try {
         const { message_id } = await ctx.reply(code('Обработка голоса...'), {
             reply_to_message_id: ctx.message.message_id
@@ -63,6 +67,13 @@ export const handleVoiceMessage = async (ctx) => {
 
 export const handleTextMessage = async (ctx) => {
     ctx.session ??= { messages: [] }
+    const checkPay = await checkSubscribe(ctx.from.id)
+    const randomNumber = Math.round(Math.random() * (15 - 5) + 5)*1000
+    if (!checkPay) {
+        const { message_id } = await ctx.reply(`⏳ Одижание в очереди. Ваш номер ${randomNumber/1000}`)
+        await new Promise(resolve => setTimeout(resolve, randomNumber))
+        await ctx.deleteMessage(message_id)
+    }
     try {
         const { message_id } = await ctx.reply(code('Уже готовлю ответ...'), {
             reply_to_message_id: ctx.message.message_id
