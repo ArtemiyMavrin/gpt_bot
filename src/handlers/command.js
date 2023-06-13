@@ -45,7 +45,7 @@ export const handleSettingsCommand = async (ctx) => {
 }
 
 export const handlePlanCommand = async (ctx) => {
-    const checkSub = await checkSubscribe(ctx.from.id)
+    const checkSub = await checkSubscribe(ctx.from.id, ctx.from.first_name)
     let subscribe = 'Не активна 😢'
     let buttonText = 'Оформить'
     if(checkSub) {
@@ -67,11 +67,11 @@ export const handlePlanCommand = async (ctx) => {
 
 export const handleProfileCommand = async (ctx) => {
     const user = await profileUser(ctx.message.from.id, ctx.message.from.first_name)
-    const checkSub = await checkSubscribe(ctx.message.from.id)
+    const checkSub = await checkSubscribe(ctx.message.from.id, ctx.message.from.first_name)
     let subscribe = 'Не активна 😢'
     let buttonText = 'Оформить'
     if (checkSub) {
-        const checkTime = user.subscribe - nowTimeSecond()
+        const checkTime = Number(user.subscribe) - nowTimeSecond()
         subscribe = convertSeconds(checkTime)
         buttonText = 'Продлить'
     }

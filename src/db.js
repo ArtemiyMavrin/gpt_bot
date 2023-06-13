@@ -4,6 +4,8 @@ const db = new PrismaClient()
 
 export async function createUser(userID,userName) {
     try {
+        console.log(userID)
+        console.log(userName)
         await db.$connect()
         const userExists = await db.user.findUnique({ where: { telegramId: userID }})
         if (!userExists) {
@@ -38,12 +40,12 @@ export async function profileUser(userID, name) {
     }
 }
 
-export async function checkSubscribe(userID) {
+export async function checkSubscribe(userID, name) {
     try {
         await db.$connect()
         const nowTime = nowTimeSecond()
-        const user = await profileUser(userID)
-        const check = user.subscribe - nowTime
+        const user = await profileUser(userID, name)
+        const check = Number(user.subscribe) - nowTime
         return check > 0
     } catch (error) {
         console.error('Ошибка получения данных подписки пользователя:', error)

@@ -25,7 +25,7 @@ const VoiceKeyboard = Markup.inlineKeyboard([
 
 export const handleReplayTypeSelection = (replayType,textReplayType) => async (ctx) => {
     ctx.session ??= { messages: [] }
-    const checkPay = await checkSubscribe(ctx.from.id)
+    const checkPay = await checkSubscribe(ctx.from.id, ctx.from.first_name)
     if(!checkPay) { return replaySubscribe(ctx) }
     ctx.session.replayType = replayType
     await ctx.answerCbQuery(`Отлично! Твой выбор — ${textReplayType}!`)
@@ -42,7 +42,7 @@ export const handleReplayTypeSelection = (replayType,textReplayType) => async (c
 
 export const handleSelectedVoice = (voice,voiceName) => async (ctx) => {
     ctx.session ??= { messages: [] }
-    const checkPay = await checkSubscribe(ctx.from.id)
+    const checkPay = await checkSubscribe(ctx.from.id, ctx.from.first_name)
     if(!checkPay) { return replaySubscribe(ctx) }
     ctx.session.voice = voice
     await ctx.answerCbQuery(`Отлично! Твой выбор — ${voiceName}!`)
