@@ -1,11 +1,9 @@
 import { PrismaClient } from '@prisma/client'
-import {addSubSeconds, convertSeconds, nowTimeSecond} from './utils.js'
+import { addSubSeconds, dayToSeconds, nowTimeSecond } from './utils.js'
 const db = new PrismaClient()
 
 export async function createUser(userID,userName) {
     try {
-        console.log(userID)
-        console.log(userName)
         await db.$connect()
         const userExists = await db.user.findUnique({ where: { telegramId: userID }})
         if (!userExists) {
@@ -49,6 +47,27 @@ export async function checkSubscribe(userID, name) {
         return check > 0
     } catch (error) {
         console.error('Ошибка получения данных подписки пользователя:', error)
+        throw error
+    } finally {
+        await db.$disconnect()
+    }
+}
+
+export async function subscribePay(userID, name, days) {
+    try {
+        await db.$connect()
+        await db.user.update({
+            where: {
+                telegramId: userID
+            },
+            data: {
+                subscribe: {
+                    increment: dayToSeconds(days)
+                }
+            },
+        })
+    } catch (error) {
+        console.error('Ошибка продления подписки:', error)
         throw error
     } finally {
         await db.$disconnect()

@@ -7,7 +7,7 @@ import config from 'config'
 import { checkSubscribe } from '../db.js'
 import { replaySubscribe } from '../utils.js'
 
-const adminMessage = config.get('ADMIN_CONTACT_MESSAGE')
+const supportMessage = config.get('SUPPORT_MESSAGE')
 
 const getVoiceFileLink = async (ctx) => {
     const { file_id } = ctx.message.voice
@@ -61,7 +61,7 @@ export const handleVoiceMessage = async (ctx) => {
         console.log('Ошибка обработки голосового сообщения')
         const messageError = processing(e)
         await ctx.reply(code(messageError))
-        await ctx.reply(adminMessage)
+        await ctx.reply(supportMessage)
     }
 }
 
@@ -92,6 +92,6 @@ export const handleTextMessage = async (ctx) => {
         console.log('Ошибка обработки текстового сообщения')
         const messageError = processing(e)
         await ctx.reply(code(messageError))
-        await ctx.reply(adminMessage)
+        await ctx.reply(supportMessage)
     }
 }
