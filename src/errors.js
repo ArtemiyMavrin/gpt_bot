@@ -1,19 +1,19 @@
 export function processing(e) {
-        if (e.response.status === 401) {
+        if (e.response?.status === 401) {
             return 'Не могу связаться с сервером OpenAI. ' +
                 'ChatGPT не отвечает. ' +
                 'Свяжитесь с тех. поддержкой бота и сообщите код ошибки: 401'
-        } else if (e.response.status === 429) {
+        } else if (e.response?.status === 429) {
             return'В настоящее время сервер OpenAI перегружен.' +
                 'Сейчас серверы OpenAI испытывают высокий трафик. ' +
                 'Пожалуйста, повторите запрос после небольшого ожидания.'
-        } else if (e.response.status === 500) {
+        } else if (e.response?.status === 500) {
             return'Ошибка сервера при обработке вашего запроса.' +
                 'Проблема на серверах OpenAI. ' +
                 'Пожалуйста, повторите запрос после небольшого ожидания.'
         } else {
             console.log(e)
-            console.log(e.response.status)
+            console.log(e.response?.status)
             return 'Возникла общая ошибка.' +
                 'Свяжитесь с тех. поддержкой бота'
         }

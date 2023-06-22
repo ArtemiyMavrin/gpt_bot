@@ -1,4 +1,5 @@
 import { Telegraf, session } from 'telegraf'
+import { Stage } from 'telegraf/scenes'
 import { message } from 'telegraf/filters'
 import { handleTextMessage, handleVoiceMessage } from './handlers/message.js'
 import {
@@ -13,9 +14,15 @@ import {
     handleReplayTypeSelection,
     handleSelectedVoice
 } from './handlers/action.js'
-import { handlePay, preCheckoutQuery, successfulPayment } from './handlers/pay.js'
+import { handlePayGetPhone,
+    preCheckoutQuery,
+    successfulPayment } from './handlers/pay.js'
 import config from 'config'
 import process from 'nodemon'
+import { scene } from './class/scene.js'
+
+const phoneScene = scene.PhoneScene()
+const stage = new Stage([phoneScene])
 
 const telegramToken = config.get('TELEGRAM_TOKEN')
 
@@ -26,6 +33,7 @@ if (!telegramToken) {
 const bot = new Telegraf(telegramToken)
 
 bot.use(session())
+bot.use(stage.middleware())
 
 bot.telegram.setMyCommands(commands)
 
@@ -47,7 +55,7 @@ bot.action('jane', handleSelectedVoice('jane','👩🏼 Джейн'))
 bot.action('madirus', handleSelectedVoice('madirus','👨🏼 Мадирос'))
 
 bot.action('plan', handlePlanCommand)
-bot.action('pay', handlePay)
+bot.action('pay', handlePayGetPhone)
 bot.on('pre_checkout_query', preCheckoutQuery)
 bot.on('successful_payment', successfulPayment)
 

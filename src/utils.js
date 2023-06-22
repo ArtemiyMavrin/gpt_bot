@@ -1,5 +1,6 @@
 import { unlink } from 'fs/promises'
-import { Markup } from 'telegraf'
+import { Markup, Scenes } from 'telegraf'
+import { message } from 'telegraf/filters'
 
 export async function removeFile(path) {
     try {

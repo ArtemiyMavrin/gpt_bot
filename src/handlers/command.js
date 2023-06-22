@@ -7,12 +7,13 @@ const price = config.get('ONE_PRICE')
 
 
 export const handleNewCommand = async (ctx) => {
-    ctx.session = { messages: [] }; await ctx.reply('Контекст сброшен. Можно начать диалог заново')
+    ctx.session.messages = []
+    await ctx.reply('Контекст сброшен. Можно начать диалог заново')
 
 }
 
 export const handleStartCommand = async (ctx) => {
-    ctx.session = { messages: [] }
+    ctx.session.messages = []
     await createUser(ctx.from.id, ctx.from.first_name)
     const welcomeMessage = `
 Привет! Добро пожаловать в нашего удивительного телеграм-бота! 👋
