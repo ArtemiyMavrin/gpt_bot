@@ -10,34 +10,35 @@ const getInvoice = (id, phone) => {
     return {
         chat_id: id,
         title: 'Оплата подписки',
-        description: 'Подписка ChatGPT BOT — 30 дней',
+        description: 'ChatGPT BOT — 30 дней',
         payload: {
             date: new Date(),
             user_id: id,
             provider: 'Ю-касса',
             bot: 'ChatGPT_Bot'
         },
-        receipt: {
-            customer: {
-                phone: phone
-            },
-            items: [
-                {
-                    description: "Подписка ChatGPT BOT — 30 дней",
-                    quantity: "1",
-                    amount: {
-                        value: `${price}.00`,
-                        currency: "RUB"
-                    },
-                    vat_code: "1"
+        provider_data:{
+            receipt: {
+                customer: {
+                    phone: phone
                 },
-
-            ]
+                items: [
+                    {
+                        description: "Подписка ChatGPT BOT — 30 дней",
+                        quantity: "1",
+                        amount: {
+                            value: `${price}.00`,
+                            currency: "RUB"
+                        },
+                        vat_code: "1"
+                    }
+                ]
+            }
         },
         provider_token: ytoken,
         start_parameter: 'pay',
         currency: 'RUB',
-        prices: [{label: '₽', amount: price * 100}]
+        prices: [{label: '30 дней', amount: price * 100}]
     }
 }
 
