@@ -27,7 +27,7 @@ const stage = new Stage([phoneScene])
 const telegramToken = config.get('TELEGRAM_TOKEN')
 
 if (!telegramToken) {
-    throw new Error('Отсутствует Телеграмм-токен в файле конфигурации')
+    throw new Error('Отсутствует Телеграмм-токен в файле конфигурации...')
 }
 
 const bot = new Telegraf(telegramToken)
