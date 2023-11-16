@@ -17,6 +17,7 @@ import {
 import { handlePayGetPhone,
     preCheckoutQuery,
     successfulPayment } from './handlers/pay.js'
+import { callbackUsers, handleCommandAdmin } from "./admin.js"
 import config from 'config'
 import process from 'nodemon'
 import { scene } from './class/scene.js'
@@ -42,6 +43,7 @@ bot.command('start', handleStartCommand)
 bot.command('settings', handleSettingsCommand)
 bot.command('profile', handleProfileCommand)
 bot.command('plan', handlePlanCommand)
+bot.command('admin', handleCommandAdmin)
 
 bot.action('profile', handleProfileCommand)
 
@@ -65,6 +67,8 @@ bot.on(message('text'), handleTextMessage)
 bot.catch((error) => {
     console.error('Telegraf error', error)
 })
+
+bot.on('callback_query', callbackUsers)
 
 function stopBot(signal) {
     console.log(`Stop signal received: ${signal}`)
