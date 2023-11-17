@@ -7,7 +7,7 @@ export async function createUser(userID,userName) {
         await db.$connect()
         const userExists = await db.user.findUnique({ where: { telegramId: userID }})
         if (!userExists) {
-            const sub = addSubSeconds(3)
+            const sub = addSubSeconds(1)
             await db.user.create({
                 data: {
                     telegramId: userID,

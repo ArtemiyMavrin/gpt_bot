@@ -1,6 +1,7 @@
 import { unlink } from 'fs/promises'
 import { Markup, Scenes } from 'telegraf'
 import { message } from 'telegraf/filters'
+import { get_encoding } from "tiktoken"
 
 export async function removeFile(path) {
     try {
@@ -50,4 +51,34 @@ export async function replaySubscribe(ctx) {
 Ты можешь оформить подписку на бота прямо сейчас!`,
         Markup.inlineKeyboard([Markup.button.callback(`❓ О подписке`, 'plan')])
     )
+}
+
+export async function checkTokens (messages) {
+
+    try {
+        const encoding = get_encoding("cl100k_base")
+        const stringMessages = JSON.stringify(messages)
+        const tokens = encoding.encode(stringMessages).length
+        const maxToken = 100000
+
+        if (tokens <= maxToken) {
+            return messages
+        }
+
+        let conditionMet = false
+        while (!conditionMet) {
+            let stringMessages = JSON.stringify(messages)
+            let tokens = encoding.encode(stringMessages).length
+            if (tokens <= maxToken) {
+                conditionMet = true
+            } else {
+                messages.splice(0, 2)
+            }
+        }
+        return messages
+
+    } catch (e) {
+        console.log( 'Ошибка проверки токенов и обработки контекста: ', e )
+        return messages
+    }
 }

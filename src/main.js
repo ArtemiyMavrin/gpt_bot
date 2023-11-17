@@ -3,7 +3,7 @@ import { Stage } from 'telegraf/scenes'
 import { message } from 'telegraf/filters'
 import { handleTextMessage, handleVoiceMessage } from './handlers/message.js'
 import {
-    commands,
+    commands, handleHelpCommand,
     handleNewCommand,
     handlePlanCommand,
     handleProfileCommand,
@@ -44,6 +44,8 @@ bot.command('settings', handleSettingsCommand)
 bot.command('profile', handleProfileCommand)
 bot.command('plan', handlePlanCommand)
 bot.command('admin', handleCommandAdmin)
+bot.command('help', handleHelpCommand)
+
 
 bot.action('profile', handleProfileCommand)
 
