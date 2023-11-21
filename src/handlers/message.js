@@ -68,12 +68,7 @@ export const handleVoiceMessage = async (ctx) => {
 export const handleTextMessage = async (ctx) => {
     ctx.session.messages ??= []
     const checkPay = await checkSubscribe(ctx.from.id, ctx.from.first_name)
-    const randomNumber = Math.round(Math.random() * (15 - 5) + 5)*1000
-    if (!checkPay) {
-        const { message_id } = await ctx.reply(`⏳ Одижание в очереди. Ваш номер ${randomNumber/1000}`)
-        await new Promise(resolve => setTimeout(resolve, randomNumber))
-        await ctx.deleteMessage(message_id)
-    }
+    if(!checkPay) { return replaySubscribe(ctx) }
     try {
         const { message_id } = await ctx.reply(code('Уже готовлю ответ...'), {
             reply_to_message_id: ctx.message.message_id
