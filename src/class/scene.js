@@ -1,5 +1,5 @@
 import { Scenes } from 'telegraf'
-import { message } from 'telegraf/filters'
+import { Markup } from 'telegraf'
 import {handlePay} from "../handlers/pay.js";
 
 class Scene {
@@ -14,7 +14,15 @@ class Scene {
 Это нужно платежной системе чтобы прислать вам чек\\.
 Мы нигде не храним ваши данные
 
-*Введите номер в формате\\:* _79008887766_`, )
+*Введите номер в формате\\:* _79008887766_`,
+                Markup.inlineKeyboard([
+                    Markup.button.callback('Отмена', 'cancel')
+                ]))
+        })
+        sPhone.action('cancel', async (ctx) => {
+            await ctx.answerCbQuery()
+            await ctx.editMessageText('Оплата отменена.')
+            await ctx.scene.leave()
         })
         sPhone.on('text', async (ctx) => {
             const phone = Number(ctx.message.text)
