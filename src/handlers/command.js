@@ -74,7 +74,7 @@ export const handlePlanCommand = async (ctx) => {
 — Озвучка ответов бота
         
 Ты можешь ${buttonText} подписку на бота прямо сейчас!`,
-        Markup.inlineKeyboard([Markup.button.callback(`💳 ${buttonText} подписку — за ${price}₽`, 'pay')])
+        Markup.inlineKeyboard([Markup.button.callback(`💳 ${buttonText} подписку — за ${price}₽`, 'selectPay')])
     )
 }
 
@@ -92,7 +92,7 @@ export const handleProfileCommand = async (ctx) => {
     
 ID: ${user.telegramId}
 Имя: ${user.name}
-Подписка: ${subscribe}`,Markup.inlineKeyboard([Markup.button.callback(`💳 ${buttonText} подписку — за ${price}₽`, 'pay')]))
+Подписка: ${subscribe}`,Markup.inlineKeyboard([Markup.button.callback(`💳 ${buttonText} подписку — за ${price}₽`, 'selectPay')]))
 }
 
 export const handleHelpCommand = async (ctx) => {

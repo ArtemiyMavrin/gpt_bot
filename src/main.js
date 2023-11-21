@@ -14,9 +14,14 @@ import {
     handleReplayTypeSelection,
     handleSelectedVoice
 } from './handlers/action.js'
-import { handlePayGetPhone,
+import {
+    handleSelectPay,
+    handleCardToCardOK,
+    handleCardToCard,
+    handlePayGetPhone,
     preCheckoutQuery,
-    successfulPayment } from './handlers/pay.js'
+    successfulPayment
+} from './handlers/pay.js'
 import { callbackUsers, handleCommandAdmin } from "./admin.js"
 import config from 'config'
 import process from 'nodemon'
@@ -59,7 +64,10 @@ bot.action('jane', handleSelectedVoice('jane','👩🏼 Джейн'))
 bot.action('madirus', handleSelectedVoice('madirus','👨🏼 Мадирос'))
 
 bot.action('plan', handlePlanCommand)
+bot.action('selectPay', handleSelectPay)
 bot.action('pay', handlePayGetPhone)
+bot.action('cardToCard', handleCardToCard)
+bot.action('cardToCardOK', handleCardToCardOK)
 bot.on('pre_checkout_query', preCheckoutQuery)
 bot.on('successful_payment', successfulPayment)
 

@@ -56,22 +56,29 @@ export async function checkSubscribe(userID, name) {
 export async function subscribePay(userID, name, days) {
     try {
         const telegramId = BigInt(userID)
+        const nowTime = nowTimeSecond()
+        const secondsToAdd = dayToSeconds(days)
+
         await db.$connect()
+        const check = await db.user.findUnique({
+            where: { telegramId }
+        })
+        const newSubscribeTime = check.subscribe >= nowTime
+            ? Number(check.subscribe) + secondsToAdd
+            : nowTime + secondsToAdd
         await db.user.update({
             where: {
-                telegramId: telegramId
+                telegramId
             },
             data: {
-                subscribe: {
-                    increment: dayToSeconds(days)
-                }
+                subscribe: newSubscribeTime
             },
         })
     } catch (error) {
-        console.error('Ошибка продления подписки:', error)
-        throw error
+        console.error('Ошибка продления подписки:', error);
+        throw error;
     } finally {
-        await db.$disconnect()
+        await db.$disconnect();
     }
 }
 

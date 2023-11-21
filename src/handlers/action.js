@@ -24,6 +24,7 @@ export const handleReplayTypeSelection = (replayType,textReplayType) => async (c
     const checkPay = await checkSubscribe(ctx.from.id, ctx.from.first_name)
     if(!checkPay) { return replaySubscribe(ctx) }
     ctx.session.replayType = replayType
+    await ctx.deleteMessage()
     await ctx.answerCbQuery(`Отлично! Твой выбор — ${textReplayType}!`)
     await ctx.reply(
         `Отлично! Твой выбор — ${textReplayType}!`)
@@ -41,6 +42,7 @@ export const handleSelectedVoice = (voice,voiceName) => async (ctx) => {
     const checkPay = await checkSubscribe(ctx.from.id, ctx.from.first_name)
     if(!checkPay) { return replaySubscribe(ctx) }
     ctx.session.voice = voice
+    await ctx.deleteMessage()
     await ctx.answerCbQuery(`Отлично! Твой выбор — ${voiceName}!`)
     await ctx.reply(`Отлично! Твой выбор — ${voiceName}!\n` +
         'Теперь напиши свой вопрос боту или запиши голосовое сообщение')

@@ -9,7 +9,12 @@ class Scene {
     PhoneScene () {
         const sPhone = new Scenes.BaseScene('sPhone')
         sPhone.enter(async (ctx) =>{
-            await ctx.replyWithMarkdown(`*Введите номер в формате:* _79008887766_`, )
+            await ctx.replyWithMarkdownV2(`*Напишите Ваш номер телефона*
+
+Это нужно платежной системе чтобы прислать вам чек\\.
+Мы нигде не храним ваши данные
+
+*Введите номер в формате\\:* _79008887766_`, )
         })
         sPhone.on('text', async (ctx) => {
             const phone = Number(ctx.message.text)

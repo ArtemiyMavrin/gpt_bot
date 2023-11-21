@@ -85,8 +85,9 @@ export const handleAllUser = async (ctx, page = 1) => {
 
 export const callbackUsers = async (ctx) => {
     const data = ctx.callbackQuery.data
-    try {
-        if (data.startsWith('info:')) {
+
+    if (data.startsWith('info:')) {
+        try {
             const userId = Number(data.split(':')[1])
             const page = data.split(':')[2]
             const user = await profileUser(userId)
@@ -115,22 +116,25 @@ export const callbackUsers = async (ctx) => {
 Продлить подписку:`
             await ctx.deleteMessage()
             ctx.replyWithMarkdown(text, addSubscribeKeyboard)
+
+        } catch (e) {
+            console.error('Ошибка получения пользователя: ', e.message)
         }
-    } catch (e) {
-        console.error('Ошибка получения пользователя: ', e.message)
     }
 
-    try {
-        if (data.startsWith('addSub:')) {
+
+    if (data.startsWith('addSub:')) {
+        try {
             const id = data.split(':')[1]
             const name = data.split(':')[2]
             const day = data.split(':')[3]
             await subscribePay(id,name,day)
             await ctx.answerCbQuery('Подписка продлена успешно')
+
+        } catch (e) {
+            console.error('Ошибка продления подписки: ', e.message)
+            await ctx.answerCbQuery('Ошибка продления подписки')
         }
-    } catch (e) {
-        console.error('Ошибка продления подписки: ', e.message)
-        await ctx.answerCbQuery('Ошибка продления подписки')
     }
 
     if (data.startsWith('usersPage:')) {
@@ -142,5 +146,32 @@ export const callbackUsers = async (ctx) => {
         await ctx.deleteMessage()
         await adminPanel(ctx)
     }
+
+    if (data.startsWith('sendPayGood:')) {
+        try {
+            const idSend = data.split(':')[1]
+            await ctx.telegram.sendMessage(idSend,`*Подписка успешно продлена*
+            
+Спасибо за оплату подписки\\.  
+Вы можете продолжить пользоваться ботом`,
+                {
+                    parse_mode: "MarkdownV2",
+                    reply_markup: {
+                        inline_keyboard: [
+                            [{
+                                text: "👤 Открыть профиль",
+                                callback_data: `profile`
+                            }]
+                        ]
+                    }
+                })
+            await ctx.answerCbQuery('Подписка успешно продлена.')
+            await ctx.deleteMessage()
+        } catch (error) {
+            console.error('Ошибка при обработке sendPayGood:', error)
+            await ctx.answerCbQuery('Произошла ошибка при продлении подписки.');
+        }
+    }
+
 
 }
