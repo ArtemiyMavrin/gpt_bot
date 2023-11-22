@@ -1,9 +1,11 @@
 {
-  "TELEGRAM_TOKEN": "6060659106:AAHYzzg2odJizJ-Z9LJ0UlIc9P9YVIirkMM",
-  "OPENAI_KEY": "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",
-  "YANDEX_CLOUD_API_KEY": "AQVN1ZFd3GsBLnd5DTn5j25GILELOcmtnoPla9d2",
-  "ADMIN_CONTACT_MESSAGE": "Тех.поддержка: @art_of_mavrin",
-  "SUPPORT_MESSAGE": "Тех.поддержка: @art_of_mavrin",
-  "ONE_PRICE": "169",
-  "Y_KASSA_TOKEN": "390540012:LIVE:36044"
+   "TELEGRAM_TOKEN": "",
+    "OPENAI_KEY": "",
+    "YANDEX_CLOUD_API_KEY": "",
+    "ADMIN_CONTACT_MESSAGE": "",
+    "SUPPORT_MESSAGE": "",
+    "ONE_PRICE": "",
+    "Y_KASSA_TOKEN": "",
+    "CARD_NUMBER": "",
+    "TELEGRAM_ID_ADMIN": ""
 }
