@@ -173,5 +173,9 @@ export const callbackUsers = async (ctx) => {
         }
     }
 
+    if (data.startsWith('search')) {
+        await ctx.scene.enter('sSearch')
+    }
+
 
 }

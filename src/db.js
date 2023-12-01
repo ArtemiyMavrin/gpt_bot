@@ -28,7 +28,12 @@ export async function profileUser(userID, name) {
     try {
         await db.$connect()
         const userExists = await db.user.findUnique({ where: { telegramId: userID }})
-        if (!userExists) { await createUser(userID, name) }
+        if (!userExists) {
+            if (name === "nocreate") {
+                return
+            }
+            await createUser(userID, name)
+        }
         return await db.user.findUnique({ where: { telegramId: userID }})
     } catch (error) {
         console.error('Ошибка получения данных пользователя:', error)

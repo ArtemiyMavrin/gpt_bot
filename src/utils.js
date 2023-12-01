@@ -1,7 +1,9 @@
 import { unlink } from 'fs/promises'
-import { Markup, Scenes } from 'telegraf'
-import { message } from 'telegraf/filters'
+import config from 'config'
+import { Markup } from 'telegraf'
 import { get_encoding } from "tiktoken"
+
+const maxToken = config.get('MAX_TOKEN')
 
 export async function removeFile(path) {
     try {
@@ -59,7 +61,7 @@ export async function checkTokens (messages) {
         const encoding = get_encoding("cl100k_base")
         const stringMessages = JSON.stringify(messages)
         const tokens = encoding.encode(stringMessages).length
-        const maxToken = 100000
+
 
         if (tokens <= maxToken) {
             return messages

@@ -28,7 +28,8 @@ import process from 'nodemon'
 import { scene } from './class/scene.js'
 
 const phoneScene = scene.PhoneScene()
-const stage = new Stage([phoneScene])
+const searchScene = scene.SearchScene()
+const stage = new Stage([phoneScene, searchScene])
 
 const telegramToken = config.get('TELEGRAM_TOKEN')
 

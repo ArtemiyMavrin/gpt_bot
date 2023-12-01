@@ -6,6 +6,7 @@ const ytoken = config.get('Y_KASSA_TOKEN')
 const price = config.get('ONE_PRICE')
 const supportMessage = config.get('SUPPORT_MESSAGE')
 const cardNumder = config.get('CARD_NUMBER')
+const cardName = config.get('CARD_NAME')
 const idadmin = config.get('TELEGRAM_ID_ADMIN')
 
 const getInvoice = (id, phone) => {
@@ -101,6 +102,8 @@ export const handleCardToCard = async (ctx) => {
 \`${cardNumder}\`
 Сумма перевода:
 \`${Math.round(price/100*80)}\`
+Получатель перевода:
+\`${cardName}\`
 
 Вы можете нажать на номер карты или сумму чтобы скопировать в один клик
 
