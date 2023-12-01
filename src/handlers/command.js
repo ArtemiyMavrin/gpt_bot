@@ -88,11 +88,11 @@ export const handleProfileCommand = async (ctx) => {
         subscribe = convertSeconds(checkTime)
         buttonText = 'Продлить'
     }
-    await ctx.reply(`👤 Профиль:
+    await ctx.replyWithMarkdown(`👤 *Профиль:*
     
-ID: ${user.telegramId}
-Имя: ${user.name}
-Подписка: ${subscribe}`,Markup.inlineKeyboard([Markup.button.callback(`💳 ${buttonText} подписку — за ${price}₽`, 'selectPay')]))
+*ID:* \`${user.telegramId}\`
+*Имя:* ${user.name}
+*Подписка:* ${subscribe}`,Markup.inlineKeyboard([Markup.button.callback(`💳 ${buttonText} подписку — за ${price}₽`, 'selectPay')]))
 }
 
 export const handleHelpCommand = async (ctx) => {
