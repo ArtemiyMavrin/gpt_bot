@@ -1,7 +1,7 @@
 import { Scenes } from 'telegraf'
 import { Markup } from 'telegraf'
-import { handlePay } from "../handlers/pay.js"
-import {profileUser} from "../db.js";
+import { handlePay } from '../handlers/pay.js'
+import { profileUser } from '../db.js'
 
 class Scene {
     constructor() {
@@ -64,7 +64,10 @@ class Scene {
             if (searchId && searchId > 0) {
                 const user = await profileUser(searchId, 'nocreate')
                 if (!user) {
-                    await ctx.replyWithMarkdownV2(`*Пользователи не найдены*`)
+                    await ctx.replyWithMarkdownV2(`*Пользователи не найдены*`,
+                        Markup.inlineKeyboard([
+                            Markup.button.callback('⏪️ Админ панель', `adminPanel`)
+                        ]))
                 } else {
                     await ctx.replyWithMarkdownV2(`*Найденые пользователи:*`,
                         Markup.inlineKeyboard([

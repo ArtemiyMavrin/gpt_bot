@@ -22,7 +22,9 @@ import {
     preCheckoutQuery,
     successfulPayment
 } from './handlers/pay.js'
-import { callbackUsers, handleCommandAdmin } from "./admin.js"
+import { handleCommandAdmin } from './admin.js'
+import { helpCommand, helpGpt } from './help.js'
+import { callbacks } from './callbacks.js'
 import config from 'config'
 import process from 'nodemon'
 import { scene } from './class/scene.js'
@@ -50,7 +52,7 @@ bot.command('settings', handleSettingsCommand)
 bot.command('profile', handleProfileCommand)
 bot.command('plan', handlePlanCommand)
 bot.command('admin', handleCommandAdmin)
-bot.command('help', handleHelpCommand)
+bot.command('help', helpCommand)
 
 
 bot.action('profile', handleProfileCommand)
@@ -69,6 +71,10 @@ bot.action('selectPay', handleSelectPay)
 bot.action('pay', handlePayGetPhone)
 bot.action('cardToCard', handleCardToCard)
 bot.action('cardToCardOK', handleCardToCardOK)
+
+bot.action('help', helpCommand)
+bot.action('helpGpt', helpGpt)
+
 bot.on('pre_checkout_query', preCheckoutQuery)
 bot.on('successful_payment', successfulPayment)
 
@@ -79,7 +85,7 @@ bot.catch((error) => {
     console.error('Telegraf error', error)
 })
 
-bot.on('callback_query', callbackUsers)
+bot.on('callback_query', callbacks)
 
 function stopBot(signal) {
     console.log(`Stop signal received: ${signal}`)

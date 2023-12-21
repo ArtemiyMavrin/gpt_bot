@@ -45,7 +45,6 @@ export async function profileUser(userID, name) {
 
 export async function checkSubscribe(userID, name) {
     try {
-        await db.$connect()
         const nowTime = nowTimeSecond()
         const user = await profileUser(userID, name)
         const check = Number(user.subscribe) - nowTime
@@ -53,8 +52,6 @@ export async function checkSubscribe(userID, name) {
     } catch (error) {
         console.error('Ошибка получения данных подписки пользователя:', error)
         throw error
-    } finally {
-        await db.$disconnect()
     }
 }
 
