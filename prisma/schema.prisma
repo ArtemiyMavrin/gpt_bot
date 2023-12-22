@@ -19,3 +19,11 @@ model User {
   name  String?
   subscribe BigInt @default(0)
 }
+
+model Promo {
+  id    Int     @id @default(autoincrement())
+  code String @unique
+  type String @default("sale")
+  meaning  Int
+  validity BigInt @default(0)
+}

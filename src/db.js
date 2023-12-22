@@ -110,3 +110,84 @@ export async function countUser() {
         await db.$disconnect()
     }
 }
+
+export async function allPromo(offset, ITEMS_PER_PAGE) {
+    try {
+        await db.$connect()
+        return await db.promo.findMany({
+            skip: offset,
+            take: ITEMS_PER_PAGE,
+        })
+    } catch (error) {
+        console.error('Ошибка получения списка пользователей:', error)
+        throw error
+    } finally {
+        await db.$disconnect()
+    }
+}
+
+export async function countPromo() {
+    try {
+        await db.$connect()
+        return await db.promo.count()
+    } catch (error) {
+        console.error('Ошибка получения количества пользователей:', error)
+        throw error
+    } finally {
+        await db.$disconnect()
+    }
+}
+
+export async function createPromo(code,type,meaning,validity) {
+    try {
+        await db.$connect()
+        const promoExists = await db.promo.findUnique({ where: { code: code }})
+        if (!promoExists) {
+            const valid = addSubSeconds(Number(validity))
+            await db.promo.create({
+                data: {
+                    code: code,
+                    type: type,
+                    meaning: Number(meaning),
+                    validity: valid
+                },
+            })
+        }
+        return true
+    } catch (error) {
+        console.error('Ошибка при создании пользователя:', error)
+        throw error
+    } finally {
+        await db.$disconnect()
+    }
+}
+
+export async function promoRemove(id) {
+    try {
+        await db.$connect()
+        const promoExists = await db.promo.findUnique({ where: { id: id }})
+        if (promoExists) {
+            await db.promo.delete({ where: { id: id }})
+            return true
+        }
+        return false
+    } catch (error) {
+        console.error('Ошибка при удалении промо:', error)
+        throw error
+    } finally {
+        await db.$disconnect()
+    }
+}
+
+export async function profilePromo(promoID) {
+    try {
+        await db.$connect()
+        const promoExists = await db.promo.findUnique({ where: { id: promoID }})
+        return promoExists || false
+    } catch (error) {
+        console.error('Ошибка получения данных промокода:', error)
+        throw error
+    } finally {
+        await db.$disconnect()
+    }
+}

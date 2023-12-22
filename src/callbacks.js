@@ -1,8 +1,8 @@
-import { profileUser, subscribePay } from './db.js'
+import {profilePromo, profileUser, promoRemove, subscribePay} from './db.js'
 import { subscribeDay } from './utils.js'
 import { Markup } from 'telegraf'
 import { helpCommand, helpGpt } from './help.js'
-import { handleAllUser, adminPanel } from './admin.js'
+import { handleAllUser, adminPanel, handleAllPromo } from './admin.js'
 
 export const callbacks = async (ctx) => {
     const data = ctx.callbackQuery.data
@@ -43,6 +43,40 @@ export const callbacks = async (ctx) => {
         }
     }
 
+    if (data.startsWith('promoInfo:')) {
+        try {
+            const promoId = Number(data.split(':')[1])
+            const page = data.split(':')[2]
+            const promo = await profilePromo(promoId)
+            const validity = subscribeDay(promo.validity)
+            const addSubscribeKeyboard = Markup.inlineKeyboard([
+                [
+                    Markup.button.callback('❌ Удалить промокод', `promoRemove:${promo.id}`)
+
+                ],
+                [
+                    Markup.button.callback('◀️ К списку промокодов', `promoPage:${page}`)
+                ],
+                [
+                    Markup.button.callback('⏪️ Админ панель', `adminPanel`)
+                ]
+            ])
+            const text = `*Промокод:*
+            
+*ID:* ${promo.id}
+*Код:* \`${promo.code}\`
+*Тип:* ${promo.type}
+*Значение:* ${promo.meaning}
+*Срок действия:* ${validity}
+`
+            await ctx.deleteMessage()
+            ctx.replyWithMarkdown(text, addSubscribeKeyboard)
+
+        } catch (e) {
+            console.error('Ошибка получения промокода: ', e.message)
+        }
+    }
+
 
     if (data.startsWith('addSub:')) {
         try {
@@ -61,6 +95,21 @@ export const callbacks = async (ctx) => {
     if (data.startsWith('usersPage:')) {
         const page = parseInt(data.split(':')[1])
         await handleAllUser(ctx, page)
+    }
+
+    if (data.startsWith('promoPage:')) {
+        const page = parseInt(data.split(':')[1])
+        await handleAllPromo(ctx, page)
+    }
+
+    if (data.startsWith('promoRemove:')) {
+        const id = parseInt(data.split(':')[1])
+        const remove = await promoRemove(id)
+        if (!remove) {
+            await ctx.answerCbQuery('Что-то пошло не так')
+        } else {
+            await ctx.answerCbQuery('Промокод успешно удален')
+        }
     }
 
     if (data.startsWith('adminPanel')) {
@@ -96,6 +145,10 @@ export const callbacks = async (ctx) => {
 
     if (data.startsWith('search')) {
         await ctx.scene.enter('sSearch')
+    }
+
+    if (data.startsWith('newPromo')) {
+        await ctx.scene.enter('sNewPromo')
     }
 
     if (data.startsWith('helpBotPage:')) {

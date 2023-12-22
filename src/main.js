@@ -31,7 +31,8 @@ import { scene } from './class/scene.js'
 
 const phoneScene = scene.PhoneScene()
 const searchScene = scene.SearchScene()
-const stage = new Stage([phoneScene, searchScene])
+const newPromoScene = scene.NewPromoScene()
+const stage = new Stage([phoneScene, searchScene, newPromoScene])
 
 const telegramToken = config.get('TELEGRAM_TOKEN')
 
